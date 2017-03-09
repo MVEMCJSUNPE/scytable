@@ -31,7 +31,10 @@ int main(void) {
         printf("Could not open file keys.txt\n");
 	      return -1;
     }
-    
+    for (i = 0; i < 25; i++) {
+	    
+    }
+
     promptUser();
 
 }
