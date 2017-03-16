@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#pragma warning(disable:4996)		// Disable security error for Visual Studio
 const int characters = 17424;
 
 int positionOfCharInWord(char string[], char searchChar, int position) {
@@ -69,19 +69,30 @@ void promptUser(char cipherText[characters]) {
 
 
 int main(void) {
-    FILE* keys = NULL;
-    keys = fopen("keys.txt", "r");
-    if (keys == NULL) {
-        printf("Could not open file keys.txt\n");
-	      return -1;
-    }
-    FILE* cipher = NULL;
-    keys = fopen("cipher.txt", "r");
-    if (cipher == NULL) {
-        printf("Could not open file cipher.txt\n");
-	      return -1;
-    }
-    char cipherText[characters];
+	char keyText[characters];
+	FILE* keys = NULL;
+	keys = fopen("keys.txt", "r");
+	if (keys == NULL) {
+		printf("Could not open file keys.txt\n");
+		exit(-1);
+	}
+
+	char cipherText[characters];
+	FILE* cipher = NULL;
+	cipher = fopen("cipher.txt", "r");
+	if (cipher == NULL) {
+		printf("Could not open file cipher.txt\n");
+		exit(-1);
+	}
+
+	char cipherOriginal[characters];
+	FILE* cipherOrg = NULL;
+	cipherOrg = fopen("cipherOriginal.txt", "r");
+	if (cipherOrg == NULL) {
+		printf("Could not open file cipherOriginal.txt\n");
+		exit(-1);
+	}
+
     printWords(keys);
     readCipher(cipher, cipherText);
     promptUser(cipherText);
