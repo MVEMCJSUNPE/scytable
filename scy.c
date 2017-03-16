@@ -16,18 +16,17 @@ int positionOfCharInWord(char string[], char searchChar, int position) {
 
 //Stage 1
 void printWords(FILE* keys) {
-    int i = 0;
-    char c = '-';
-    while (!feof(keys)) {
-	fscanf(keys, "%c", &c);
-	if (c == ' ') {
-	    printf("\n");
+	int i = 0;
+	char c = '-';
+	while (fscanf(keys, "%c", &c) != EOF) {
+		if (c == ' '){
+			printf("\n");
 	}
-	else {
-	    printf("%c", c);
-	    //Extra line printed for some reason
+		else {
+			printf("%c", c);
+			//Extra line printed for some reason
+		}
 	}
-    }
 }
 
 //Stage 2
