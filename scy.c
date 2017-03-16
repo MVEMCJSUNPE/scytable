@@ -98,5 +98,8 @@ int main(void) {
     promptUser(cipherText);
     fclose(keys);
     fclose(cipher);
+	
+	int rey = 0;			//make useless variable to stop program form exiting console in visual studio
+	scanf("%d", &rey);		// same as above
 
 }
