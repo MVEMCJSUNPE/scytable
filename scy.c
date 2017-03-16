@@ -37,19 +37,39 @@ void printWords(FILE* keys) {
     }
 }
 
+//DO NOT USE 17424 in a for loop for this function. Otherwise, it will print characters past '\0'. 
+void readCipher(FILE* cipher, char cipherText[characters]) {
+    int i = 0;
+    int j = 0;
+    char c = '-';
+    while (!feof(cipher)) {
+	fscanf(cipher, "%c", &c);
+	cipherText[i] = c;
+	++i;
+    }
+    cipherText[i] = '\0';
+    while (cipherText[j] != '\0') {
+	printf("%c", cipherText[j]);
+	++j;
+    }
+}
 
 int main(void) {
-    char cipherText[characters];
     FILE* keys = NULL;
     keys = fopen("keys.txt", "r");
     if (keys == NULL) {
         printf("Could not open file keys.txt\n");
 	      return -1;
     }
-    for (i = 0; i < 25; i++) {
-	    
+    FILE* cipher = NULL;
+    keys = fopen("cipher.txt", "r");
+    if (cipher == NULL) {
+        printf("Could not open file cipher.txt\n");
+	      return -1;
     }
-
-    promptUser();
+    char cipherText[characters];
+    printWords(keys);
+    readCipher(cipher, cipherText);
+    
 
 }
