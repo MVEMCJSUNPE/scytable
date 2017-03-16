@@ -22,6 +22,21 @@ int positionOfCharInWord(char string[], char searchChar, int position) {
     return -1;
 }
 
+void printWords(FILE* keys) {
+    int i = 0;
+    char c = '-';
+    while (!feof(keys)) {
+	fscanf(keys, "%c", &c);
+	if (c == ' ') {
+	    printf("\n");
+	}
+	else {
+	    printf("%c", c);
+	    //Extra line printed for some reason
+	}
+    }
+}
+
 
 int main(void) {
     char cipherText[characters];
