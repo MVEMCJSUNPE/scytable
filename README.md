@@ -1,3 +1,2 @@
 # scytable
-For CS 141. This program is a miniature scytable. Scytables are basically ciphers. Take a message, write it on a long strip
-of paper, and then wrap it around a branch. 
+For CS 141 class. Project info can be found here: https://sites.google.com/site/uiccs141/prog-4
