@@ -32,17 +32,22 @@ int positionOfCharInWord(char string[], char searchChar, int position) {
 }
 
 //Stage 1
+
 void printWords(FILE* keys) {
 	int i = 0;
 	char c = '-';
 	while (fscanf(keys, "%c", &c) != EOF) {
 		if (c == ' '){
 			printf("\n");
-	}
-		else {
+			}
+		if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+		{
 			printf("%c", c);
 		}
-	}
+		else {
+			continue;
+			}
+		}
 }
 
 //Stage 2
