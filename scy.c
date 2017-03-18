@@ -37,13 +37,6 @@ int convertTo2DArray(FILE* keys, char keyArray[maxWords][maxWordSize]) {
     return words + 1;
 }
 
-/*
-int length(FILE* keys) {
-    int count = 0;
-    while (!feof(keys)) {
-    ++
-	    }
-*/
 
 //Stage 1
 void printWords(FILE* keys) {
@@ -61,7 +54,7 @@ void printWords(FILE* keys) {
 }
 
 //Stage 2
-int readCipher(FILE* cipher, char cipherText[cipherChar]) {
+void readCipher(FILE* cipher, char cipherText[cipherChar]) {
     int i = 0;
     int j = 0;
     char c = '-';
@@ -79,12 +72,12 @@ int readCipher(FILE* cipher, char cipherText[cipherChar]) {
 }
 
 //Stage 3
-void promptUser(char cipherText[cipherChar], int* number) {
+void promptUser(char cipherText[cipherChar], int* charLine) {
     int i = 0;
     printf("Please enter a number (1..132): \n");
-    scanf("%d", number);
+    scanf("%d", charLine);
     while (cipherText[i] != '\0') {
-	if ((i % *number == 0) ) {
+	if ((i % *charLine == 0) ) {
 	    printf("\n");
 	    printf("%c", cipherText[i]);
 	    ++i;
@@ -97,13 +90,73 @@ void promptUser(char cipherText[cipherChar], int* number) {
 }
 
 //Stage 4
-/*
-void compareDiagonal(FILE* keys, char cipherText[cipherChar], int number) {
+void compareHorizontal(char keyArray[maxWords][maxWordSize], char cipherText[cipherChar], int numWords) {
     int i = 0;
-    char c = 
+    int j = 0;
+    int firstLetterIndex = 0;
+    int wordIndex = 0;
+    int value = 1;
+    int count = 0;
+    char c = '-';
+    for (i = 0; i < numWords; ++i) {
+	while (index != -1) {
+	    firstLetterIndex = positionOfCharInWord(cipherText, keyArray[i][0], firstLetterIndex + 1); 
+	    wordIndex = firstLetterIndex;
+	    while (keyArray[i][j] != '\0') {
+		value = value * (cipherText[index] == keyArray[i][j]);
+		++j;
+		++wordIndex;
+		printf("wordIndex: %d\n", wordIndex);
+	    }
+	    if (value == 1) {
+		while (count < 3) {
+		    c = cipherText[index];
+		    //printf("%c", c);
+		    ++index;
+		    if (c == ' ') {
+			++count;
+		    }
+		}
+	    }
+	}
+    }
+}
+
+/*
+void compareDiagonal(char keyArray[maxWords][maxWordSize], char cipherText[cipherChar], int charLine, int numWords) {
+    int i = 0;
+    int j = 0;
     int index = 0;
-    while (index != -1) {
-	index = positionOfCharInWord(cipherText, ' ', index + 1);
+    int value = 1;
+    int count = 0;
+    char c = '-';
+    for (i = 0; i < numWords; ++i) {
+	while (index != -1) {
+	    index = positionOfCharInWord(cipherText, keyArray[i][0], index + 1); 
+	    while (keyArray[i][j] != '\0') {
+		value = value * (cipherText[index] == keyArray[i][j]);
+		++j;
+		index;
+	    }
+	if (value == 1) {
+	    while (count < 3) {
+		if (c == ' ') {
+		    c = cipherText[index];
+		    printf("%c", c);
+		    ++index;
+		    ++count;
+		}
+		else {
+		    c = cipherText[index];
+		    printf("%c", c);
+		    ++index;
+		}
+
+	    }
+	}
+	}
+    }
+}
 */
 
 
@@ -123,7 +176,7 @@ int main(void) {
 	return -1;
     }
     char cipherText[cipherChar];
-    int number = 0;
+    int charLine = 0;
     int numWords = 0;
     char keyArray[maxWords][maxWordSize];
     numWords = convertTo2DArray(keys, keyArray);
@@ -134,13 +187,13 @@ int main(void) {
     }
     */
     //stage 1
-    //printWords(keys);
+    printWords(keys);
     //stage 2
-    //readCipher(cipher, cipherText);
-    printf("numWords: %d", numWords);
+    readCipher(cipher, cipherText);
     fclose(cipher);
     //stage 3
-    //promptUser(cipherText, &number);
+    promptUser(cipherText, &charLine);
+    compareHorizontal(keyArray, cipherText, numWords);
     fclose(keys);
     
 }
