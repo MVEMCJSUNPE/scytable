@@ -74,7 +74,10 @@ int readCipher(FILE* cipher, char cipherText[cipherChar]) {
     while (!feof(cipher)) {
 	//if run-time error shows up, might want to check here.
 	fscanf(cipher, "%c", &c);
+	cipherText[i] = c;
+	++i;
 	//printf("%c", c);
+	/*
 	if ((((int) c > 65) && ((int) c < 90)) || ((((int) c) > 97) || (((int) c) < 122))) {
 	    cipherText[i] = c;
 	    ++i;
@@ -83,6 +86,7 @@ int readCipher(FILE* cipher, char cipherText[cipherChar]) {
 	    cipherText[i] = '*';
 	    ++i;
 	}
+	*/
 	
     }
     cipherText[i] = '\0';
@@ -214,7 +218,7 @@ void compareDiagonal(char keyArray[maxWords][maxWordSize], char cipherText[ciphe
 void tryAllPossibleValues(char keyArray[maxWords][maxWordSize], char cipherText[cipherChar], int numWords) {
     int i = 13;
     compareHorizontal(keyArray, cipherText, i, numWords);
-    for (i = 13; i < 133; ++i) {
+    for (i = 13; i < 18; ++i) {
 	compareDiagonal(keyArray, cipherText, i, numWords);
     }
 }
