@@ -9,9 +9,9 @@ const int maxWordSize = 25;
 void header(void) {
     printf(
     "Welcome to the decoding program, where hidden messages are found inside of a text file.\n \n"
-    "Author: Daniel Xu and Shehab Zalloum\n"
+    "Author: Daniel Xu and Shehab\n"
     "Program: #4, Secret\n" 
-    "TA: Nianzu Ma, Wednesday, 4:00 P.M.\n" 
+    "TA: Gail Chapman, Tues 10\n" 
     "Mar 5, 2017\n" 
     );
 }
@@ -51,10 +51,7 @@ int convertTo2DArray(FILE* keys, char keyArray[maxWords][maxWordSize]) {
 	    ++j;
 	}
     }
-    printf("Before: last word: %c", keyArray[words][j]);
-    keyArray[words][j - 1] = '\0';
-    printf("After: last word: %c", keyArray[words][j - 2]);
-    keyArray[words + 1][0] = '\0';
+    keyArray[words][j] = '\0';
     return words + 1;
 }
 
@@ -70,22 +67,40 @@ void printWords(char keyArray[maxWords][maxWordSize]) {
 }
 
 //Stage 2
-void readCipher(FILE* cipher, char cipherText[cipherChar]) {
+int readCipher(FILE* cipher, char cipherText[cipherChar]) {
     int i = 0;
     int j = 0;
     char c = '-';
     while (!feof(cipher)) {
-	//if error shows up, might want to check here.
+	//if run-time error shows up, might want to check here.
 	fscanf(cipher, "%c", &c);
-	cipherText[i] = c;
-	++i;
+	//printf("%c", c);
+	if ((((int) c > 65) && ((int) c < 90)) || ((((int) c) > 97) || (((int) c) < 122))) {
+	    cipherText[i] = c;
+	    ++i;
+	}
+	else {
+	    cipherText[i] = '*';
+	    ++i;
+	}
+	
     }
     cipherText[i] = '\0';
     while (cipherText[j] != '\0') {
 	printf("%c", cipherText[j]);
 	++j;
     }
+    return i;
 }
+
+int cipherLength(char cipherText[cipherChar]) {
+    int i = 0;
+    while (cipherText[i] != '\0') {
+	++i;
+    }
+    return i;
+}
+   
 
 //Stage 3
 void promptUser(char cipherText[cipherChar], int* charLine) {
@@ -116,18 +131,18 @@ void compareHorizontal(char keyArray[maxWords][maxWordSize], char cipherText[cip
     char c = '-';
     int matchIndex = 0;
     for (i = 0; i < numWords; ++i) {
-	printf("i: %d\n", i);
+	//printf("i: %d\n", i);
 	while (firstLetterIndex != -1) {
 	    firstLetterIndex = positionOfCharInWord(cipherText, keyArray[i][0], firstLetterIndex + 1); 
-	    printf("    firstLetterIndex: %d\n", firstLetterIndex);
+	    //printf("    firstLetterIndex: %d\n", firstLetterIndex);
 	    wordIndex = firstLetterIndex;
-	    while ((keyArray[i][j] != '\0') /*&& (value == 1)*/) {
-		printf("        wordIndex: %d\n", wordIndex);
+	    while ((keyArray[i][j] != '\0') && (wordIndex < cipherLength(cipherText)) ) {
+		//printf("        wordIndex: %d\n", wordIndex);
 		value = value * (cipherText[wordIndex] == keyArray[i][j]);
 		++j;
 		++wordIndex;
-		printf("            j: %d\n", j);
-		printf("            value: %d\n", value);
+		//printf("            j: %d\n", j);
+		//printf("            value: %d\n", value);
 	    }
 	    if (value == 1) {
 		printf("Found \"%s\" horizontally with table size %d at %d. Secret message: ", keyArray[i], charLine, firstLetterIndex);
@@ -149,7 +164,6 @@ void compareHorizontal(char keyArray[maxWords][maxWordSize], char cipherText[cip
 	firstLetterIndex = 0;
     }
 }
-
 
 void compareDiagonal(char keyArray[maxWords][maxWordSize], char cipherText[cipherChar], int charLine, int numWords) {
     int i = 0;
@@ -195,10 +209,12 @@ void compareDiagonal(char keyArray[maxWords][maxWordSize], char cipherText[ciphe
     }
 }
 
+
+
 void tryAllPossibleValues(char keyArray[maxWords][maxWordSize], char cipherText[cipherChar], int numWords) {
     int i = 13;
     compareHorizontal(keyArray, cipherText, i, numWords);
-    for (i = 13; i < 132; ++i) {
+    for (i = 13; i < 133; ++i) {
 	compareDiagonal(keyArray, cipherText, i, numWords);
     }
 }
@@ -213,7 +229,7 @@ int main(void) {
     }
     //Creating cipher file pointer variable
     FILE* cipher = NULL;
-    cipher = fopen("cipher.txt", "r");
+    cipher = fopen("cipherOriginal.txt", "r");
     if (cipher == NULL) {
 	printf("Could not open file cipher.txt\n");
 	return -1;
@@ -224,34 +240,35 @@ int main(void) {
     char userInput = 0;
     char keyArray[maxWords][maxWordSize];
     numWords = convertTo2DArray(keys, keyArray);
-    /*
+    printf("numWords: %d\n", numWords);
     //stage 0
     header();
     //stage 1
     printf("Read in %d keyWords, which are:\n", numWords);
     printWords(keyArray);
+    printf("\n");
     //stage 2
     //Do NOT DO: Have readCipher return the number of characters and use that with %d in the printf statement below
+    readCipher(cipher, cipherText);
     printf(
-    "Read in cipherText characters.\n \n"
+    "Read in %d cipherText characters.\n \n"
     "Choose from the following options:\n"     
     "   1. Display a particular sized table\n" 
     "   2. Find all matching key word phrases\n" 
     "   3. Place key word phrase into a datafile (not required for students)\n" 
     "   X. Exit the program\n" 
     "Enter your choice -> "
-    );
+    , cipherLength(cipherText));
     scanf("%c", &userInput);
-    readCipher(cipher, cipherText);
     switch(userInput) {
 	case '1':
-	    //stage 3
+	    //stage 4
 	    promptUser(cipherText, &charLine);
 	    compareHorizontal(keyArray, cipherText, charLine, numWords);
 	    compareDiagonal(keyArray, cipherText, charLine, numWords);
 	    break;
 	case '2':
-	    //stage 4
+	    //stage 5
 	    tryAllPossibleValues(keyArray, cipherText, numWords);
 	    break;
 	case 'x':
@@ -263,8 +280,8 @@ int main(void) {
 	    printf("You did not enter a valid input. Please try again.\n");
 	    break;
     }
-    */
     fclose(cipher);
     fclose(keys);
     
 }
+
